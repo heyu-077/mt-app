@@ -10,14 +10,14 @@
 </template>
 
 <script>
-import geo from './geo.vue';
-import MyNav from './nav.vue';
+import geo from './geo.vue'
+import MyNav from './nav.vue'
 
 export default {
-     components:{
-         geo,
-         MyNav
-     }
+  components: {
+    geo,
+    MyNav
+  }
 }
 </script>
 
