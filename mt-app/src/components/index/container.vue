@@ -39,11 +39,19 @@
 </template>
 
 <script>
+import api from '@/api/index.js'
 export default {
   data () {
     return {
-      kind: 'tianjin'
+      kind: 'tianjin',
+      resultData: {}
     }
+  },
+  created () {
+    api.getResultProducts().then(res => {
+      //  console.log(res.data.data);
+      this.resultData = res.data.data
+    })
   },
   props: ['nav'],
   methods: {

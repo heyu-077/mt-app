@@ -19,12 +19,22 @@
 import Province from '@/components/changeCity/province.vue'
 import Hot from '@/components/changeCity/hot.vue'
 import Categroy from '@/components/changeCity/categroy.vue'
+import api from '@/api/index.js'
 export default {
   data () {
     return {
-      hotCityList: ['北京', '上海', '广州', '深圳', '成都'],
-      recentCityList: ['北京', '门头沟区']
+      hotCityList: [],
+      recentCityList: []
     }
+  },
+  created () {
+    api.getHotCity().then(res => {
+      console.log(res)
+      this.hotCityList = res.data.data.map(item => item.name)
+    })
+    api.getRecentCity().then(res => {
+      this.recentCityList = res.data.data.map(item => item.name)
+    })
   },
   components: {
     Province,

@@ -8,6 +8,7 @@
       :showWrapperActive="provinceActive"
       @change_active="changeProvinceActive"
       @change="changeProvince"
+      className="province"
     />
     <m-select
       :list="cityList"
@@ -16,6 +17,8 @@
       :showWrapperActive="cityActive"
       @change_active="changeCityActive"
       @change="changeCity"
+      :disabled="cityDisabled"
+      className="city"
     />
     <span>直接搜索:</span>
     <el-select
@@ -40,19 +43,30 @@
 
 <script>
 import MSelect from './select.vue'
+import api from '@/api/index.js'
 export default {
   data () {
     return {
-      provinceList: [ '山东', '甘肃', '江苏', '北京', '云南', '海南', '浙江', '上海' ],
+      provinceList: [],
       province: '省份',
-      cityList: ['合肥', '蚌埠', '淮南', '六安', '黄山', '阜阳', '滁州', '巢湖'],
+      cityList: [],
       city: '城市',
       cityActive: false,
       provinceActive: false,
       searchList: [ '合肥', '蚌埠', '淮南', '六安', '黄山', '阜阳', '滁州', '巢湖' ],
       searchWord: '',
-      loading: false
+      loading: false,
+      cityDisabled: true
     }
+  },
+  created () {
+    api.getProvinceList().then(res => {
+      this.provinceList = res.data.data.map((item) => {
+        item.name = item.provinceName
+        return item
+      })
+      // this.cityList = res.data.data.cityInfoList.map(item=>item.name);
+    })
   },
   methods: {
     changeProvinceActive (flag) {
@@ -70,11 +84,15 @@ export default {
     remoteMethod (val) {
       console.log(val)
     },
-    changeProvince (value) {
-      this.province = value
+    changeProvince (item) {
+      this.province = item.name
+      this.cityDisabled = false
+      this.cityList = item.cityInfoList
     },
-    changeCity (value) {
-      this.city = value
+    changeCity (item) {
+      this.city = item.name
+      this.$store.dispatch('setPosition', item)
+      this.$router.push({name: 'index'})
     }
   },
   components: {

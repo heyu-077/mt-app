@@ -10,14 +10,15 @@
       </li>
     </ul>
     <el-row>
-        <item v-for="(item,index) in productList" :key="index" :meta="item"></item>
-        <item v-for="(item,index) in productList" :key="index" :meta="item"></item>
+        <item v-for="item in productList" :key="item.title" :meta="item"></item>
+        <!-- <item v-for="(item,index) in productList" :key="index" :meta="item"></item> -->
     </el-row>
   </div>
 </template>
 
 <script>
 import Item from './item.vue'
+import api from '@/api/index.js'
 export default {
   data () {
     return {
@@ -43,37 +44,17 @@ export default {
           active: false
         }
       ],
-      productList: [
-        {
-          image: 'https://p0.meituan.net/ugcpic/c31c1c15f4cab4a2d8aa3331984f5e4c@220w_125h_1e_1c',
-          title: '火鸡老店',
-          type: 'food',
-          score: '4.1',
-          commentNum: 10,
-          comment: [
-            {
-              username: 'xxxx',
-              evalaute: '好吃'
-            }
-          ],
-          tab: ['火锅', '沙河'],
-          address: '昌平区小汤山尚信村沿温榆河畔北岸向西3．5公里',
-          avgPrice: 64,
-          dealItems: [
-            {
-              title: '火鸡宴，建议10-14人使用',
-              price: 909,
-              counterPrice: 1150,
-              saleNum: 10,
-              priceType: '元'
-            }
-          ]
-        }
-      ],
+      productList: []
     }
+  },
+  created () {
+    api.getGoodList().then(res => {
+      // console.log(res)
+      this.productList = res.data.data
+    })
   },
   components: {
     Item
-  },
+  }
 }
 </script>
